@@ -122,8 +122,8 @@
           <thead class="table-success ">
             <tr>
               <th class="col-1">Tên</th>
-              <th class="col-1">Khoảng thời gian trồng trọt</th>
-              <th class="col-4">Thời gian bón phân</th>
+              <th class="col-2">Thời gian trồng</th>
+              <th class="col-3">Thời gian bón phân</th>
               <th class="col-3">Quy trình trồng trọt</th>
               <!-- <th class="col-1">Khối lượng phân bón</th> -->
               <th class="col-3">Quản lý</th>

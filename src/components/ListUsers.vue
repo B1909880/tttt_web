@@ -77,7 +77,7 @@
             <tr class="mx-auto text-center">
               <th class="col-2">Tên</th>
               <th class="col-2">Username </th>
-              <th class="col-2">Mật khẩu</th>
+              <th class="col-2">Ngày tạo</th>
               <th class="col-1">Số điện thoại</th>
               <th class="col-2">Địa chỉ</th>
               <th class="col-1">Quản lý</th>
@@ -87,7 +87,7 @@
             <tr v-for="user in result" :key="user.id">
               <td>{{ user.name }}</td>
               <td>{{ user.username }}</td>
-              <td></td>
+              <td>{{ user.createdDay }}</td>
               <td>{{ user.phone }}</td>
               <td>{{ user.address }}</td>
 
