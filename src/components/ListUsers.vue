@@ -40,7 +40,7 @@
                 <input type="text" v-model="user.address" class="form-control" id="formGroupExampleInput2"
                   placeholder="Nhập vào đại chỉ">
               </div>
-              <button type="submit" class="btn btn-success col-2 ">Lưu</button>
+              <button type="submit" class="btn btn-success col-2 "><i class="bi bi-save"></i> Lưu</button>
             </form>
 
             <div v-if="errorMessage">{{ errorMessage }}</div>
@@ -48,7 +48,8 @@
           </div>
           <div class="modal-footer">
 
-            <button type="button" class="btn btn-secondary col-2" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i>
+              Đóng</button>
 
 
           </div>
@@ -59,7 +60,7 @@
     <div class="row">
       <div class="col-2"></div>
       <div class="col-10">
-        <h3 class="text-center my-4">DANH SÁCH NÔNG DÂN</h3>
+        <h3 class="text-center my-5">DANH SÁCH NÔNG DÂN</h3>
         <template>
           <div class="">
             <div class="row">
@@ -67,18 +68,6 @@
                   data-bs-target="#exampleModal"><i class="bi bi-plus-lg"></i>
                   Thêm
                 </button></div>
-
-              <!-- <div class="col-6">
-                <div class="row">
-                  <div class="input-group">
-                    <input type="text" class="form-control" v-model="searchName" @input="searchByName()"
-                      placeholder="Nhập tên để tìm kiếm...">
-                    <div class="input-group-append">
-                      <button class="btn btn-secondary ">Tìm kiếm</button>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
             </div>
           </div>
         </template>
@@ -95,17 +84,16 @@
             </tr>
           </thead>
           <tbody>
-            <!-- <tr v-for="user in resultOnPage" :key="user.id"> -->
             <tr v-for="user in result" :key="user.id">
-              <!-- <tr v-for="search in result" v-bind:key="search.id"> -->
               <td>{{ user.name }}</td>
               <td>{{ user.username }}</td>
               <td></td>
               <td>{{ user.phone }}</td>
               <td>{{ user.address }}</td>
 
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" @click="deleteSearch(user)"><i class="bi bi-trash3"></i> Xóa</button>
+              <td class="text-center">
+                <button type="button" class="btn btn-danger btn-sm" @click="deleteSearch(user)"><i
+                    class="bi bi-trash3"></i> Xóa</button>
               </td>
             </tr>
           </tbody>
@@ -168,8 +156,6 @@ export default {
     this.searchLoad();
   },
   methods: {
-
-
     async searcheLoad() {
       try {
         const response = await axios.get('http://localhost:8098/auth/');
@@ -178,22 +164,16 @@ export default {
         const totalPages = Math.ceil(this.result.length / this.itemsPerPage);
         this.pages = Array.from({ length: totalPages }, (_, index) => index + 1);
         this.goToPage(1);
-
-
       } catch (error) {
         console.error(error);
       }
     },
-
-
     goToPage(pageNumber) {
       const startIndex = (pageNumber - 1) * this.itemsPerPage;
       const endIndex = Math.min(startIndex + this.itemsPerPage, this.result.length);
       this.resultOnPage = this.result.slice(startIndex, endIndex);
       this.currentPage = pageNumber;
     },
-
-
     save() {
       if (!this.user.id) {
         this.saveData();
@@ -202,11 +182,7 @@ export default {
         this.editData();
       }
     },
-
     saveData() {
-
-
-
       axios.post('http://localhost:8098/auth/register', this.user)
         .then(response => {
           console.log(response);
@@ -220,8 +196,6 @@ export default {
           this.errorMessage = error.response.data;
           this.successMessage = '';
         });
-
-
     },
     edit(user) {
       this.user = user;
@@ -250,19 +224,14 @@ export default {
       axios.get(url)
         .then(response => {
           this.result = response.data;
-
           const totalPages = Math.ceil(this.result.length / this.itemsPerPage);
           this.pages = Array.from({ length: totalPages }, (_, index) => index + 2);
           this.goToPage(1);
-
         })
         .catch(error => {
           console.error(error);
-
         });
-
     }
-
   },
 
   mounted() {

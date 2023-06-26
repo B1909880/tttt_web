@@ -59,7 +59,7 @@
     <div class="row">
       <div class="col-2"></div>
       <div class="col-10">
-        <h3 class="text-center my-4">DANH SÁCH TRA CỨU</h3>
+        <h3 class="text-center my-5">DANH SÁCH TRA CỨU</h3>
 
         <template>
           <div class="">

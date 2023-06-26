@@ -8,7 +8,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">
+            <h1 class="modal-title fs-5 mx-auto text-center" id="exampleModalLabel">
               <div class="" v-if="cultivateGuide.id === null"> THÊM HƯỚNG DẪN CANH TÁC</div>
               <div class="" v-else>CHỈNH SỬA HƯỚNG DẪN CANH TÁC</div>
             </h1>
@@ -28,11 +28,6 @@
                   id="formGroupExampleInput2" placeholder="Nhập vào khoảng thời gian trồng trọt ">
               </div>
 
-              <!-- <div class="mb-3">
-                <input type="text" v-model="fertilizingTime" class="form-control" id="formGroupExampleInput3"
-                  placeholder="Nhập vào thời gian bón phân "><i class="bi bi-plus-square"></i>
-                <button type="button" class="btn btn-primary btn-sm" @click="addFertilizingTime">Thêm</button>
-              </div> -->
               <div class="mb-3">
                 <label for="formGroupExampleInput3" class="form-label fw-bold">Thời gian bón phân: </label><button
                   class="btn btn-primary" @click="addFertilizingTime" type="button" id="button-addon2"
@@ -42,13 +37,6 @@
               </div>
 
               <div v-for="time in cultivateGuide.fertilizingTimeList" :key="time.id">
-                <!-- <div class=""> -->
-
-                <!-- <div class="input-group mb-3">
-                  <label class="input-group-text  border-top">Ngày</label>
-
-                </div> -->
-
                 <div class="mb-3 row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Ngày</label>
                   <div class="col-sm-9">
