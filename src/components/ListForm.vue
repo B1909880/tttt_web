@@ -64,18 +64,30 @@
         <template>
           <div class="">
             <div class="row">
-              <div class="col-6"> <button type="button" class="btn btn-success col-3" data-bs-toggle="modal"
+              <div class="col-5"> <button type="button" class="btn btn-success col-3" data-bs-toggle="modal"
                   data-bs-target="#exampleModal"><i class="bi bi-plus-lg"></i> Thêm</button>
               </div>
-              <div class="col-6">
+              <div class="col-7">
                 <div class="row">
-                  <div class="input-group">
-                    <input type="text" class="form-control" v-model="searchName" placeholder="Nhập tên để tìm kiếm...">
-                    <div class="input-group-append">
-                      <button class="btn btn-secondary" @click="searchByName()"><i class="bi bi-search"></i> Tìm
-                        kiếm</button>
+
+                  <!-- form tìm kiếm -->
+                  <form @submit="searchBy">
+                    <div class="input-group">
+                      <input type="text" class="form-control" v-model="name" placeholder="Nhập tên để tìm kiếm...">
+                      <select class="form-select" v-model="typeSearch" aria-label="Default select example">
+                        <option value="" selected>Chọn loại tìm kiếm</option>
+                        <option value="1">Giá giống</option>
+                        <option value="2">Giá vật tư</option>
+                        <option value="3">Giá thu mua</option>
+                        <option value="4">Hướng dẫn canh tác</option>
+                      </select>
+                      <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i> Tìm
+                          kiếm</button>
+                      </div>
                     </div>
-                  </div>
+                  </form>
+
                 </div>
               </div>
             </div>
@@ -95,7 +107,7 @@
           <tbody>
             <tr v-for="search in resultOnPage" :key="search.id">
               <td>{{ search.name }}</td>
-              <td>{{ search.price }} VNĐ</td>
+              <td>{{ search.price }}</td>
               <td>{{ search.description }}</td>
               <td class="text-center">
                 <div v-if="search.typeSearch == '1'">Giá giống</div>
@@ -160,12 +172,80 @@ export default {
       resultOnPage: [],
       searchName: '',
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       pages: [],
+
+      name: '',
+      typeSearch: '',
+      price: '',
+      params: [],
+      noResultsMessage: ''
     };
   },
 
   methods: {
+
+    // lỗi tìm kiếm price
+    // searchBy(event) {
+    //   event.preventDefault();
+
+    //   axios.get('http://localhost:8098/search/searches', {
+    //     params: {
+    //       name: this.name,
+    //       price: this.price,
+    //       typeSearch: this.typeSearch,
+    //       both: this.name && this.typeSearch && this.price ? true : false
+    //     }
+    //   })
+    //   .then(response => {
+    //     if (response.data.length > 0) {
+    //       this.resultOnPage = response.data;
+    //       this.noResultsMessage = '';
+    //     } else {
+    //       this.resultOnPage = [];
+    //       this.noResultsMessage = 'No results found.';
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
+    // },
+
+    searchBy(event) {
+      event.preventDefault();
+
+      let params = {};
+
+      if (this.name && !this.typeSearch) {
+        params = {
+          name: this.name
+        };
+      } else if (!this.name && this.typeSearch) {
+        params = {
+          typeSearch: this.typeSearch
+        };
+      } else if (this.name && this.typeSearch) {
+        params = {
+          name: this.name,
+          typeSearch: this.typeSearch
+        };
+      }
+
+      axios.get('http://localhost:8098/search/searches', { params })
+        .then(response => {
+          if (response.data.length > 0) {
+            this.resultOnPage = response.data;
+            this.noResultsMessage = '';
+          } else {
+            this.resultOnPage = [];
+            this.noResultsMessage = 'No results found.';
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
     async searcheLoad() {
       try {
         const response = await axios.get('http://localhost:8098/search/');

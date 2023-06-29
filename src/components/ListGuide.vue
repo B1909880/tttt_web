@@ -62,7 +62,8 @@
                       aria-label="With textarea" placeholder="Nhập vào số lượng phân bón trên hecta" />
                   </div>
                 </div>
-                <button type="button" class="btn btn-danger mb-3" @click="removeFertilizingTime(time)"><i class="bi bi-trash3"></i> Xóa</button>
+                <button type="button" class="btn btn-danger mb-3" @click="removeFertilizingTime(time)"><i
+                    class="bi bi-trash3"></i> Xóa</button>
 
               </div>
 
@@ -106,13 +107,7 @@
 
                     </div>
                   </div>
-                  <!-- <div class="input-group">
-                    <input type="text" class="form-control" v-model="searchName" @input="searchByName()"
-                      placeholder="Nhập tên để tìm kiếm...">
-                    <div class="input-group-append">
-                      <button class="btn btn-secondary ">Tìm kiếm</button>
-                    </div>
-                  </div> -->
+
                 </div>
               </div>
             </div>
@@ -202,7 +197,6 @@ export default {
         plantingInterval: '',
         fertilizingTimeList: [],
         plantingGuide: '',
-        // amountOfFertilizer: '',
         createdDay: null,
         updatedDay: null
       },
@@ -212,7 +206,7 @@ export default {
       searchByName: '',
       resultOnPage: [],
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       pages: [],
       searchTerm: '',
     };
@@ -225,22 +219,6 @@ export default {
 
   },
   methods: {
-    // Thêm mục thời gian bón phân mới vào danh sách
-    //   addFertilizingTime() {
-    //   const newFertilizingTime = {
-    //     date: "",
-    //     description: "",
-    //      quantity: ""
-    //   };
-    //   this.cultivateGuide.fertilizingTimeList.push(newFertilizingTime);
-    // },
-    // // Xóa mục thời gian bón phân từ danh sách
-    // removeFertilizingTime(fertilizingTime) {
-    //   const index = this.cultivateGuide.fertilizingTimeList.indexOf(fertilizingTime);
-    //   if (index !== -1) {
-    //     this.cultivateGuide.fertilizingTimeList.splice(index, 1);
-    //   }
-    // },
     searchLoad() {
       var page = "http://localhost:8098/cultivateGuide/";
       axios.get(page)
@@ -286,7 +264,7 @@ export default {
     addFertilizingTime() {
       // Thêm thời gian bón phân vào danh sách
       const time = {
-        // id: Date.now(),
+        id: Date.now(),
         date: '',
         description: '',
         quantity: ''
@@ -304,7 +282,7 @@ export default {
     edit(cultivateGuide) {
       this.cultivateGuide = cultivateGuide;
       const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
-      this.cultivateGuide.createdDay = currentDateTime;
+
       this.cultivateGuide.updatedDay = currentDateTime;
 
     },
