@@ -77,9 +77,9 @@
             <tr class="mx-auto text-center">
               <th class="col-2">Tên</th>
               <th class="col-2">Username </th>
-              <th class="col-2">Ngày tạo</th>
               <th class="col-1">Số điện thoại</th>
               <th class="col-2">Địa chỉ</th>
+              <th class="col-2">Ngày tạo</th>
               <th class="col-1">Quản lý</th>
             </tr>
           </thead>
@@ -87,9 +87,9 @@
             <tr v-for="user in result" :key="user.id">
               <td>{{ user.name }}</td>
               <td>{{ user.username }}</td>
-              <td>{{ user.createdDay }}</td>
               <td>{{ user.phone }}</td>
               <td>{{ user.address }}</td>
+              <td>{{ user.createdDay }}</td>
 
               <td class="text-center">
                 <button type="button" class="btn btn-danger btn-sm" @click="deleteSearch(user)"><i
@@ -124,6 +124,7 @@
 </template>
 <script>
 import Vue from 'vue';
+import moment from 'moment';
 import axios from 'axios';
 Vue.use(axios)
 export default {
@@ -183,6 +184,10 @@ export default {
       }
     },
     saveData() {
+      const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      this.user.createdDay = currentDateTime;
+      this.user.updatedDay = currentDateTime;
+
       axios.post('http://localhost:8098/auth/register', this.user)
         .then(response => {
           console.log(response);
@@ -202,6 +207,9 @@ export default {
 
     },
     editData() {
+      const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      this.user.updatedDay = currentDateTime;
+
       axios.put(`http://localhost:8098/auth/${this.user.id}`, this.user)
         .then(({ data }) => {
           // location.reload();// Reset form fields Reset form fields
