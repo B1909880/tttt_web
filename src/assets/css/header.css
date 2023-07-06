@@ -1,0 +1,52 @@
+
+.left-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #034E36;
+  width: 200px;
+  height: 100%;
+}
+
+.left-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.left-nav li {
+  margin: 10px 0;
+}
+
+.left-nav li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.left-nav li a:hover {
+  background-color: white;
+  color: rgb(24, 114, 24);
+}
+
+.content {
+  margin-left: 200px;
+}
+
+a[name="end"] {
+  display: block;
+  position: relative;
+  top: -80px;
+  visibility: hidden;
+}
+
+.navbar-dark {
+  background-color: rgb(88, 90, 89);
+
+
+}
+
+.hr-customer {
+  border-top: 2px solid #F3F1F1;
+}

@@ -1,3 +1,5 @@
+
+
 <template>
   <div class="container">
     <!-- Modal -->
@@ -30,7 +32,7 @@
 
                 <select class="form-select" v-model="search.typeSearch" aria-label="Default select example">
 
-                  <option selected>Loại tìm kiếm</option>
+                  <option value="" selected>Loại tìm kiếm</option>
                   <option value="1">Giá giống</option>
                   <option value="2">Giá vật tư</option>
                   <option value="3">Giá thu mua</option>
@@ -93,6 +95,9 @@
             </div>
           </div>
         </template>
+        <div>
+
+        </div>
 
         <table class="table table-bordered mx-auto  mt-3">
           <thead class="table-success text-center">
@@ -144,6 +149,7 @@
             </li>
           </ul>
         </nav>
+
       </div>
 
     </div>
@@ -153,9 +159,10 @@
 import Vue from 'vue';
 import moment from 'moment';
 import axios from 'axios';
+
+import { getSearches, createSearch, updateSearch, deleteSearch, searchByName, searchByParams } from '../services/Search';
 Vue.use(axios)
 export default {
-  name: 'searchCrud',
   data() {
     return {
       search: {
@@ -182,34 +189,9 @@ export default {
       noResultsMessage: ''
     };
   },
-
   methods: {
 
-    // lỗi tìm kiếm price
-    // searchBy(event) {
-    //   event.preventDefault();
 
-    //   axios.get('http://localhost:8098/search/searches', {
-    //     params: {
-    //       name: this.name,
-    //       price: this.price,
-    //       typeSearch: this.typeSearch,
-    //       both: this.name && this.typeSearch && this.price ? true : false
-    //     }
-    //   })
-    //   .then(response => {
-    //     if (response.data.length > 0) {
-    //       this.resultOnPage = response.data;
-    //       this.noResultsMessage = '';
-    //     } else {
-    //       this.resultOnPage = [];
-    //       this.noResultsMessage = 'No results found.';
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
-    // },
 
     searchBy(event) {
       event.preventDefault();
@@ -231,7 +213,7 @@ export default {
         };
       }
 
-      axios.get('http://localhost:8098/search/searches', { params })
+      searchByParams(params)
         .then(response => {
           if (response.data.length > 0) {
             this.resultOnPage = response.data;
@@ -248,7 +230,7 @@ export default {
 
     async searcheLoad() {
       try {
-        const response = await axios.get('http://localhost:8098/search/');
+        const response = await getSearches();
         this.result = response.data;
 
         const totalPages = Math.ceil(this.result.length / this.itemsPerPage);
@@ -287,7 +269,7 @@ export default {
       this.search.createdDay = currentDateTime;
       this.search.updatedDay = currentDateTime;
 
-      axios.post('http://localhost:8098/search/post', this.search)
+      createSearch(this.search)
         .then(response => {
           console.log(response);
           location.reload();
@@ -302,7 +284,7 @@ export default {
       const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
       this.search.updatedDay = currentDateTime;
 
-      axios.put(`http://localhost:8098/search/${this.search.id}`, this.search)
+     updateSearch(this.search.id, this.search)
         .then(({ data }) => {
           // Logic cập nhật dữ liệu
         })
@@ -313,30 +295,15 @@ export default {
 
     },
     deleteSearch(search) {
-      axios.delete("http://localhost:8098/search/" + search.id).then(response => {
-        console.log(response);
-
-        location.reload()
-      });
-    },
-
-    searchByName() {
-      const url = `http://localhost:8098/search/name?name=${this.searchName}`;
-      axios.get(url)
+      deleteSearch(search.id)
         .then(response => {
-          this.result = response.data;
-
-          const totalPages = Math.ceil(this.result.length / this.itemsPerPage);
-          this.pages = Array.from({ length: totalPages }, (_, index) => index + 2);
-          this.goToPage(1);
-
+          console.log(response);
+          location.reload();
         })
         .catch(error => {
           console.error(error);
-
         });
-
-    }
+    },
 
   },
   mounted() {

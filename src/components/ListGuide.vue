@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-
-    <!-- Button trigger modal -->
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -35,7 +32,6 @@
                   Thêm
                 </button>
               </div>
-
               <div v-for="time in cultivateGuide.fertilizingTimeList" :key="time.id">
                 <div class="mb-3 row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Ngày</label>
@@ -44,8 +40,6 @@
                       placeholder="Nhập vào ngày" />
                   </div>
                 </div>
-
-
                 <div class="mb-3 row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Mô tả</label>
                   <div class="col-sm-9">
@@ -53,9 +47,7 @@
                       placeholder="Nhập mô tả" />
                   </div>
                 </div>
-
                 <div class="mb-3 row">
-
                   <label for="inputPassword" class="col-sm-3 col-form-label">Số lượng</label>
                   <div class="col-sm-9">
                     <input type="number" min="1" class="form-control rounded" v-model="time.quantity"
@@ -64,16 +56,12 @@
                 </div>
                 <button type="button" class="btn btn-danger mb-3" @click="removeFertilizingTime(time)"><i
                     class="bi bi-trash3"></i> Xóa</button>
-
               </div>
-
               <div class="mb-3">
                 <label for="formGroupExampleInput4" class="form-label fw-bold">Quy trình trồng trọt:</label>
                 <textarea type="text" v-model="cultivateGuide.plantingGuide" class="form-control"
                   id="formGroupExampleInput4" placeholder="Nhập vào quy trình trồng trọt "></textarea>
               </div>
-
-
               <button type="submit" class="btn btn-success col-2 my-2"><i class="bi bi-save"></i> Lưu</button>
             </form>
           </div>
@@ -85,12 +73,11 @@
       </div>
     </div>
 
-
+    
     <div class="row">
       <div class="col-2"></div>
       <div class="col-10">
         <h3 class="text-center my-5">DANH SÁCH HƯỚNG DẪN CANH TÁC</h3>
-
         <template>
           <div class="">
             <div class="row">
@@ -120,20 +107,13 @@
               <th class="col-2">Thời gian trồng</th>
               <th class="col-3">Thời gian bón phân</th>
               <th class="col-3">Quy trình trồng trọt</th>
-              <!-- <th class="col-1">Khối lượng phân bón</th> -->
               <th class="col-3">Quản lý</th>
             </tr>
           </thead>
           <tbody>
-            <!-- danh sách  -->
-            <!-- <tr v-for="cultivateGuide in result" v-bind:key="cultivateGuide.id"> -->
-            <!-- <tr v-for="cultivateGuide in resultOnPage" :key="cultivateGuide.id"> -->
-            <!-- phân trang -->
-
             <tr v-for="cultivateGuide in resultOnPage" :key="cultivateGuide.id">
               <td>{{ cultivateGuide.name }}</td>
               <td>{{ cultivateGuide.plantingInterval }}</td>
-              <!-- <td>{{ cultivateGuide.fertilizingTimeList }}</td> -->
               <td>
                 <ul>
                   <li v-for="time in cultivateGuide.fertilizingTimeList" :key="time.id">
@@ -142,8 +122,6 @@
                 </ul>
               </td>
               <td>{{ cultivateGuide.plantingGuide }}</td>
-              <!-- <td>{{ cultivateGuide.amountOfFertilizer }}</td> -->
-
               <td class="text-center">
                 <button type="button" class="btn btn-warning btn-sm text-white" data-bs-toggle="modal"
                   data-bs-target="#exampleModal" @click="edit(cultivateGuide)"><i class="bi bi-pencil"></i> Chỉnh
@@ -155,9 +133,6 @@
             </tr>
           </tbody>
         </table>
-
-
-        <!-- Phân trang -->
         <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-end">
             <li class="page-item" v-bind:class="{ disabled: currentPage === 1 }">
@@ -186,6 +161,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
+import { getcultivateGuide, createcultivateGuide, updatecultivateGuide, deletecultivateGuide, getCultivateGuideByName } from '../services/cultivateGuide';
 Vue.use(axios)
 export default {
   name: 'searchCrud',
@@ -218,21 +194,21 @@ export default {
     console.log("mounted() called.......");
 
   },
+
   methods: {
-    searchLoad() {
-      var page = "http://localhost:8098/cultivateGuide/";
-      axios.get(page)
-        .then(
-          ({ data }) => {
-            console.log(data);
-            this.result = data;
+    async searcheLoad() {
+      try {
+        const response = await getcultivateGuide();
+        this.result = response.data;
+
+        const totalPages = Math.ceil(this.result.length / this.itemsPerPage);
+        this.pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+        this.goToPage(1);
 
 
-            const totalPages = Math.ceil(this.result.length / this.itemsPerPage);
-            this.pages = Array.from({ length: totalPages }, (_, index) => index + 1);
-            this.goToPage(1);
-          }
-        );
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     goToPage(pageNumber) {
@@ -255,7 +231,7 @@ export default {
       this.cultivateGuide.createdDay = currentDateTime;
       this.cultivateGuide.updatedDay = currentDateTime;
 
-      axios.post('http://localhost:8098/cultivateGuide/post', this.cultivateGuide)
+      createcultivateGuide(this.cultivateGuide)
         .then(response => {
           console.log(response);
           location.reload();
@@ -287,48 +263,34 @@ export default {
 
     },
     editData() {
-      axios.put(`http://localhost:8098/cultivateGuide/${this.cultivateGuide.id}`, this.cultivateGuide)
+      updatecultivateGuide(this.cultivateGuide.id, this.cultivateGuide)
         .then(({ data }) => {
-          // location.reload();// Reset form fields Reset form fields
           const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
           this.cultivateGuide.updatedDay = currentDateTime;
-
         })
-
         .catch((error) => {
           console.error(error);
         });
-
     },
     deleteSearch(cultivateGuide) {
-      axios.delete("http://localhost:8098/cultivateGuide/" + cultivateGuide.id).then(response => {
-        console.log(response);
-
-        location.reload()
-      });
-    },
-
-    search() {
-      axios.get(`http://localhost:8098/cultivateGuide/name/${this.searchTerm}`)
+      deletecultivateGuide(cultivateGuide.id)
         .then(response => {
-          if (response.data) {
-            // Xử lý trường hợp tìm thấy kết quả
-            if (Array.isArray(response.data)) {
-              // Nếu kết quả trả về là một mảng các đối tượng
-              this.resultOnPage = response.data;
-            } else {
-              // Nếu kết quả trả về là một đối tượng
-              this.resultOnPage = [response.data];
-            }
-          } else {
-            // Xử lý trường hợp không tìm thấy kết quả
-            this.resultOnPage = [];
-          }
+          console.log(response);
+
+          location.reload()
+        });
+    },
+    search() {
+      getCultivateGuideByName(this.searchTerm)
+        .then(response => {
+
+          this.guideList = response.data;
         })
         .catch(error => {
           console.error(error);
         });
     },
+
   },
 
   mounted() {

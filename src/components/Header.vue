@@ -1,7 +1,5 @@
-
 <template>
   <div class="row">
-
     <div class="col">
       <div class="navbar-dark">
         <div class="row">
@@ -16,7 +14,6 @@
 
               <h5 style=" color: aliceblue;"> <i class="bi bi-person-circle icon"></i> QUẢN TRỊ VIÊN
               </h5>
-
             </div>
           </div>
         </div>
@@ -34,9 +31,9 @@
           <ul class="mt-4">
             <hr class="hr-customer">
 
-            <li class="border-bottom"><a href="http://localhost:8080/#/list-tra-cuu">Quản lý tra cứu</a></li>
-            <li class="border-bottom"><a href="http://localhost:8080/#/list-canh-tac">Hướng dẫn canh tác</a></li>
-            <li class="border-bottom"><a href="http://localhost:8080/#/list-nong-dan">Quản lý nông dân</a></li>
+            <li class="border-bottom"><a href="http://localhost:8080/#/list-search">Quản lý tra cứu</a></li>
+            <li class="border-bottom"><a href="http://localhost:8080/#/list-cultivateGuide">Hướng dẫn canh tác</a></li>
+            <li class="border-bottom"><a href="http://localhost:8080/#/list-users">Quản lý nông dân</a></li>
           </ul>
         </nav>
 
